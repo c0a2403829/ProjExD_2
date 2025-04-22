@@ -52,6 +52,9 @@ def main():
                 return
         screen.blit(bg_img, [0, 0]) 
 
+        if kk_rct.colliderect(bb_rct):
+            return 
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for key,mv in DELTA.items():
@@ -68,6 +71,7 @@ def main():
         #     sum_mv[0] += 5
         kk_rct.move_ip(sum_mv)
         bb_rct.move_ip(vx,vy)
+        #画面外に出させない
         if check_bound(kk_rct)!= (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         yoko,tate=check_bound(bb_rct) 
@@ -75,6 +79,7 @@ def main():
             vx*=-1
         if not tate:
             vy*=-1
+        
         screen.blit(kk_img, kk_rct)
         screen.blit(bb_img,bb_rct)
         pg.display.update()
