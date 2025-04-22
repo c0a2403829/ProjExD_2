@@ -106,7 +106,13 @@ def main():
         # if key_lst[pg.K_RIGHT]:
         #     sum_mv[0] += 5
         kk_rct.move_ip(sum_mv)
-        bb_rct.move_ip(vx,vy)
+        bb_imgs,bb_accs=init_bb_imgs()
+        avx=vx*bb_accs[min(tmr//500,9)]
+        avy=vy*bb_accs[min(tmr//500,9)]
+        bb_img=bb_imgs[min(tmr//500,9)]
+        bb_rct.move_ip(avx,avy)
+        screen.blit(bb_img,bb_rct)
+        
         #画面外に出させない
         if check_bound(kk_rct)!= (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
@@ -117,11 +123,6 @@ def main():
             vy*=-1
         
         screen.blit(kk_img, kk_rct)
-
-        bb_imgs,bb_accs=init_bb_imgs()
-        vx=vx*bb_accs[min(tmr//500,9)]
-        bb_img=bb_imgs[min(tmr//500,9)]
-        screen.blit(bb_img,bb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)
