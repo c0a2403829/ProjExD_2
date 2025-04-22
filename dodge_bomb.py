@@ -34,6 +34,11 @@ def check_bound(rct:pg.Rect) ->tuple[bool,bool]:
 
 
 def gameover(screen:pg.Surface)->None:
+    """
+    引数:screen
+    戻り値:なし
+    画面にgameoverを表示する
+    """
     
     black_img = pg.Surface((WIDTH,HEIGHT))
     pg.draw.rect(black_img,(0,0,0),pg.Rect(0,0,WIDTH,HEIGHT))
@@ -53,6 +58,11 @@ def gameover(screen:pg.Surface)->None:
     
 
 def init_bb_imgs() ->tuple[list[pg.Surface], list[int]]:
+    """
+    引数:なし
+    戻り値:２つのリストのタプル
+    時間とともに爆弾が拡大，加速する
+    """
     bb_accs=[a for a in range(1,11)]
     bb_imgs=[]
     for r in range(1,11):
@@ -63,7 +73,11 @@ def init_bb_imgs() ->tuple[list[pg.Surface], list[int]]:
     return bb_imgs,bb_accs
 
 
+def get_kk_img(sum_mv:tuple[int,int])->pg.Surface:
+    # for key,mv in DELTA.items():
+    sum_mv==4
 
+    
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
