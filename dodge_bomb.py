@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -14,20 +15,53 @@ DELTA={
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
-def check_bound(rect:pg.Rect) ->tuple[bool,bool]:
+def check_bound(rct:pg.Rect) ->tuple[bool,bool]:
     #横方向判定
     """
     引数:こうかとんRectまたは爆弾Rect
     戻り値:判定結果(横、縦)
     画面内ならTrue,画面外ならFalse
     """
-    yoko=False
-    tate=False
-    if 0 < rect.left < WIDTH:
-        yoko = True
-    if 0 < rect.top < HEIGHT:
-        tate = True
-    return yoko,tate
+    
+    yoko, tate = True, True  # 横，縦方向用の変数
+     # 横方向判定
+    if rct.left < 0 or WIDTH < rct.right:  # 画面外だったら
+        yoko = False
+     # 縦方向判定
+    if rct.top < 0 or HEIGHT < rct.bottom: # 画面外だったら
+        tate = False
+    return yoko, tate
+
+
+def gameover(screen:pg.Surface)->None:
+    
+    black_img = pg.Surface((WIDTH,HEIGHT))
+    pg.draw.rect(black_img,(0,0,0),pg.Rect(0,0,WIDTH,HEIGHT))
+    black_img.set_alpha(125)
+
+    fonto=pg.font.Font(None,80)
+    txt=fonto.render("Game Over",
+                     True,(255,255,255))
+    
+    crying_img = pg.image.load("fig/8.png")
+    
+    screen.blit(black_img,[0,0])
+    screen.blit(txt,[400,250])
+    screen.blit(crying_img,[330,250])
+    screen.blit(crying_img,[730,250])
+    pg.display.update()
+    
+
+def init_bb_imgs() ->tuple[list[pg.Surface], list[int]]:
+    bb_accs=[a for a in range(1,11)]
+    bb_imgs=[]
+    for r in range(1,11):
+        bb_img=pg.Surface((20*r,20*r))
+        bb_imgs.append(bb_img)
+        pg.draw.circle(bb_img,(255,0,0),(10*r,10*r),10*r)
+        bb_img.set_colorkey((0,0,0))
+    return bb_imgs,bb_accs
+
 
 
 def main():
@@ -53,6 +87,8 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bb_rct):
+            gameover(screen)
+            time.sleep(5)
             return 
 
         key_lst = pg.key.get_pressed()
@@ -81,6 +117,10 @@ def main():
             vy*=-1
         
         screen.blit(kk_img, kk_rct)
+
+        bb_imgs,bb_accs=init_bb_imgs()
+        vx=vx*bb_accs[min(tmr//500,9)]
+        bb_img=bb_imgs[min(tmr//500,9)]
         screen.blit(bb_img,bb_rct)
         pg.display.update()
         tmr += 1
