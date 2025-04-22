@@ -100,6 +100,7 @@ def main():
                 return
         screen.blit(bg_img, [0, 0]) 
 
+        #ボールがこうかとんに当たったらgameoverしてgameを終わる
         if kk_rct.colliderect(bb_rct):
             gameover(screen)
             time.sleep(5)
@@ -119,6 +120,8 @@ def main():
         #     sum_mv[0] -= 5
         # if key_lst[pg.K_RIGHT]:
         #     sum_mv[0] += 5
+
+        #徐々に早く、大きくする
         kk_rct.move_ip(sum_mv)
         bb_imgs,bb_accs=init_bb_imgs()
         avx=vx*bb_accs[min(tmr//500,9)]
